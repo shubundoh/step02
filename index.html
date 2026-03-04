@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山田太郎 | Web Designer Portfolio</title>
+    <!-- フォントとアイコンの読み込み -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==========================================
+           CSS変数 (テーマカラー定義)
+           ========================================== */
+        :root {
+            /* ライトモード (デフォルト) */
+            --main-color: #2C3E50; /* ダークブルー */
+            --accent-color: #E74C3C; /* レッド */
+            --bg-color: #ECF0F1; /* ライトグレー */
+            --text-color: #333333;
+            --card-bg: #FFFFFF;
+            
+            /* UI用追加変数 */
+            --text-muted: #666666;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #BDC3C7;
+            --hero-bg-gradient: linear-gradient(135deg, #ECF0F1 0%, #D5DBDB 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            /* ダークモード */
+            --main-color: #ECF0F1; /* 暗い背景用に明るい色に反転 */
+            --accent-color: #E74C3C; 
+            --bg-color: #1a1a1a; 
+            --text-color: #ECF0F1;
+            --card-bg: #2C3E50; /* メインカラーを転用 */
+            
+            /* UI用追加変数 */
+            --text-muted: #A0AAB5;
+            --header-bg: rgba(26, 26, 26, 0.95);
+            --border-color: #444444;
+            --hero-bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2C3E50 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ==========================================
+           リセット＆ベーススタイル
+           ========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+            color: var(--main-color);
+            transition: color 0.3s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* ==========================================
+           アニメーションクラス
+           ========================================== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================
+           ヘッダー＆ナビゲーション
+           ========================================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--main-color);
+            letter-spacing: 1px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* テーマ切り替えボタン */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--main-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+        }
+
+        /* モバイルメニューボタン */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--main-color);
+            cursor: pointer;
+        }
+
+        /* ==========================================
+           ヒーローセクション
+           ========================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--hero-bg-gradient);
+            padding-top: 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before, .hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .hero::before {
+            width: 600px;
+            height: 600px;
+            background-color: var(--main-color);
+            top: -200px;
+            right: -100px;
+        }
+
+        .hero::after {
+            width: 400px;
+            height: 400px;
+            background-color: var(--accent-color);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-title span {
+            color: var(--accent-color);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #FFFFFF;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            box-shadow: none;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--main-color);
+            color: var(--card-bg);
+        }
+
+        /* ==========================================
+           自己紹介セクション (About)
+           ========================================== */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .about-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-pic-container {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 8px solid var(--card-bg);
+            box-shadow: var(--shadow);
+            position: relative;
+            background-color: #D5DBDB;
+        }
+        
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-text {
+            flex: 1.5;
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--main-color);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        .highlight-box {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--main-color);
+        }
+
+        .hobby-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hobby-tag {
+            background-color: rgba(44, 62, 80, 0.1);
+            color: var(--main-color);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* ダークモード時のタグ背景調整 */
+        [data-theme="dark"] .hobby-tag {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ==========================================
+           スキルセクション (Skills)
+           ========================================== */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background-color: var(--card-bg);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--main-color);
+        }
+
+        .skill-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .skill-list li i {
+            color: var(--accent-color);
+            margin-top: 5px;
+            margin-right: 12px;
+            font-size: 0.8rem;
+        }
+
+        .skill-name {
+            font-weight: 700;
+            display: block;
+            color: var(--main-color);
+        }
+
+        .skill-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* ==========================================
+           実績セクション (Works)
+           ========================================== */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .work-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .work-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .work-img {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 4rem;
+            position: relative;
+        }
+
+        /* プロジェクトごとのダミー画像背景 */
+        .work-img.case1 { background: linear-gradient(135deg, #2C3E50, #4CA1AF); }
+        .work-img.case2 { background: linear-gradient(135deg, #E74C3C, #F39C12); }
+        .work-img.case3 { background: linear-gradient(135deg, #D35400, #F1C40F); }
+
+        .work-info {
+            padding: 2rem;
+        }
+
+        .work-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--main-color);
+            line-height: 1.4;
+        }
+
+        .work-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           お問い合わせセクション (Contact)
+           ========================================== */
+        .contact-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-text {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--main-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .contact-social {
+            margin-top: 3rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            color: var(--main-color);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-color);
+            color: #FFF;
+            transform: translateY(-3px);
+        }
+
+        /* ==========================================
+           フッター
+           ========================================== */
+        footer {
+            background-color: var(--header-bg);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================
+           レスポンシブデザイン
+           ========================================== */
+        @media (max-width: 900px) {
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .highlight-box {
+                text-align: left;
+            }
+
+            .hobby-list {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                padding: 0 20px;
+            }
+
+            /* モバイルナビゲーション */
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: var(--header-bg);
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 10px 10px rgba(0,0,0,0.05);
+            }
+
+            .nav-links.active {
+                max-height: 300px;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 15px 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .contact-wrapper {
+                padding: 2rem 1.5rem;
+            }
+            
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Taro.Design</a>
+            <div class="nav-right">
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#works">Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="theme-toggle" id="theme-toggle" aria-label="テーマ切り替え">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="メニュー">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main>
+        <!-- ヒーローセクション -->
+        <section class="hero" id="home">
+            <div class="container hero-content fade-in">
+                <h1 class="hero-title">Colors <span>Logic</span>,<br>Designs <span>Magic</span>.</h1>
+                <p class="hero-subtitle">
+                    色彩検定1級の知識と確かなコーディング技術で、企業の想いを「伝わる」形に。<br>
+                    CVR向上に貢献するWebデザインを提供します。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#works" class="btn btn-primary">実績を見る</a>
+                    <a href="#contact" class="btn btn-outline">お問い合わせ</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 自己紹介セクション -->
+        <section class="section-padding" id="about">
+            <div class="container">
+                <h2 class="section-title fade-in">Who I Am</h2>
+                <div class="about-content fade-in">
+                    <div class="about-image">
+                        <div class="profile-pic-container">
+                            <img src="https://placehold.co/400x400" alt="山田太郎 プロフィール画像">
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <h3>はじめまして、Webデザイナーの山田太郎です。</h3>
+                        <p>都内の制作会社で3年間、企業のコーポレートサイトや商品LPの制作に従事し、現在はフリーランスとして活動しています。</p>
+                        
+                        <div class="highlight-box">
+                            <h4><i class="fa-solid fa-palette" style="color: var(--accent-color); margin-right: 8px;"></i> 強み</h4>
+                            <p style="margin-bottom: 0;">ただ綺麗なだけでなく、色彩心理学に基づいた配色設計が得意です。「信頼感を与える青」「購買意欲をそそる赤」など、目的に合わせた色使いでビジネスの課題解決をサポートします。</p>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4 style="margin-bottom: 0.8rem; font-size: 1rem; color: var(--main-color);">趣味</h4>
+                            <div class="hobby-list">
+                                <span class="hobby-tag"><i class="fa-solid fa-magnifying-glass"></i> 街中の看板の配色分析</span>
+                                <span class="hobby-tag"><i class="fa-solid fa-mug-hot"></i> カフェ巡り</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- スキルセクション -->
+        <section class="section-padding" style="background-color: rgba(0,0,0,0.02);" id="skills">
+            <div class="container">
+                <h2 class="section-title fade-in">My Skills</h2>
+                <div class="skills-container fade-in">
+                    
+                    <!-- Design Skills -->
+                    <div class="skill-card">
+                        <div class="skill-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                        <h3>Design</h3>
+                        <ul class="skill-list">
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">Figma / Adobe XD</span>
+                                    <span class="skill-desc">ワイヤーフレーム・プロトタイプ作成</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">Photoshop</span>
+                                    <span class="skill-desc">写真補正・バナー作成</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">Illustrator</span>
+                                    <span class="skill-desc">ロゴ・アイコン作成</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">色彩検定1級</span>
+                                    <span class="skill-desc">AFT認定</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Development Skills -->
+                    <div class="skill-card">
+                        <div class="skill-icon"><i class="fa-solid fa-code"></i></div>
+                        <h3>Development</h3>
+                        <ul class="skill-list">
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">HTML5</span>
+                                    <span class="skill-desc">セマンティックなマークアップ</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">CSS3 / SCSS</span>
+                                    <span class="skill-desc">Flexbox, Grid, BEM設計</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">JavaScript</span>
+                                    <span class="skill-desc">DOM操作, アニメーション</span>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-check"></i>
+                                <div>
+                                    <span class="skill-name">WordPress</span>
+                                    <span class="skill-desc">オリジナルテーマ作成</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 実績セクション -->
+        <section class="section-padding" id="works">
+            <div class="container">
+                <h2 class="section-title fade-in">Selected Works</h2>
+                <div class="works-grid fade-in">
+                    
+                    <!-- Case 1 -->
+                    <article class="work-card">
+                        <div class="work-img case1">
+                            <i class="fa-regular fa-building"></i>
+                        </div>
+                        <div class="work-info">
+                            <h3 class="work-title">株式会社テックスタイル (コーポレートサイト)</h3>
+                            <p class="work-desc">信頼感を重視したネイビー基調のデザイン。レスポンシブ対応によりスマホからの問い合わせが120%増加。</p>
+                        </div>
+                    </article>
+
+                    <!-- Case 2 -->
+                    <article class="work-card">
+                        <div class="work-img case2">
+                            <i class="fa-solid fa-pump-soap"></i>
+                        </div>
+                        <div class="work-info">
+                            <h3 class="work-title">美容液「Lumiere」 (ランディングページ)</h3>
+                            <p class="work-desc">ターゲット層（30代女性）に響くゴールドとピンクの配色。FVの離脱率改善に貢献。</p>
+                        </div>
+                    </article>
+
+                    <!-- Case 3 -->
+                    <article class="work-card">
+                        <div class="work-img case3">
+                            <i class="fa-solid fa-mug-saucer"></i>
+                        </div>
+                        <div class="work-info">
+                            <h3 class="work-title">カフェ「Sun & Beans」 (店舗サイト)</h3>
+                            <p class="work-desc">暖色系で居心地の良さを表現。メニューのシズル感を引き立てるレイアウト。</p>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- お問い合わせセクション -->
+        <section class="section-padding" style="background-color: rgba(0,0,0,0.02);" id="contact">
+            <div class="container">
+                <h2 class="section-title fade-in">Get In Touch</h2>
+                
+                <div class="contact-wrapper fade-in">
+                    <p class="contact-text">制作のご依頼、お見積もり、その他ご相談はお気軽にどうぞ。<br>2営業日以内に返信いたします。</p>
+                    
+                    <form class="contact-form" onsubmit="event.preventDefault(); alert('メッセージが送信されました（デモ用）');">
+                        <div class="form-group">
+                            <label for="name">お名前</label>
+                            <input type="text" id="name" class="form-control" placeholder="山田 太郎" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">メールアドレス</label>
+                            <input type="email" id="email" class="form-control" placeholder="example@mail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">お問い合わせ内容</label>
+                            <textarea id="message" class="form-control" placeholder="ご用件をご記入ください" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">送信する</button>
+                    </form>
+
+                    <div class="contact-social">
+                        <div class="social-links">
+                            <a href="#" class="social-link" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                            <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container">
+            <p class="copyright">&copy; 2026 Taro Yamada Portfolio. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. ダークモード/ライトモード切り替え
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            const themeIcon = themeToggle.querySelector('i');
+
+            // ローカルストレージから保存されたテーマを取得
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                updateThemeIcon(savedTheme);
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            }
+
+            // 2. モバイルメニューの開閉
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navLinks = document.getElementById('nav-links');
+            const menuIcon = mobileMenuBtn.querySelector('i');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                if (navLinks.classList.contains('active')) {
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-xmark');
+                } else {
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+                }
+            });
+
+            // 3. スムーススクロールとモバイルメニューを閉じる処理
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // モバイルメニューが開いていたら閉じる
+                    navLinks.classList.remove('active');
+                    menuIcon.classList.remove('fa-xmark');
+                    menuIcon.classList.add('fa-bars');
+
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // ヘッダーの高さを考慮してスクロール
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // 4. スクロールアニメーション (Intersection Observer)
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // 要素が15%見えたら発火
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // 一度発火したら監視を解除
+                    }
+                });
+            }, observerOptions);
+
+            // .fade-in クラスを持つすべての要素を監視
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+
+        });
+    </script>
+</body>
+</html>
